@@ -1,4 +1,4 @@
-package net.photonmed.android.app.utils;
+package <Your Namespace Here>;
 
 import android.content.Context;
 import android.graphics.Bitmap;
