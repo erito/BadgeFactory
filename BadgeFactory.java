@@ -34,6 +34,7 @@ import android.util.TypedValue;
 public class BadgeFactory {
 
     private static final int BADGE_RADIUS = 30;
+    private static final int NO_COLOR = -1;
 
     private enum BadgeType {
         Circular, //for single digit badges
@@ -72,7 +73,7 @@ public class BadgeFactory {
         this.mRightRect = new RectF();
         this.textBounds = new Rect();
         this.mCount = "";
-        this.badgeColor = -1;
+        this.badgeColor = NO_COLOR;
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16,
                 context.getResources().getDisplayMetrics());
         this.paint = new Paint();
@@ -162,6 +163,10 @@ public class BadgeFactory {
     }
 
     public Bitmap build() {
+
+        if (badgeColor == NO_COLOR) {
+            throw new IllegalArgumentException("Badge Color wasn't specified");
+        }
 
         Bitmap output = Bitmap.createBitmap((int) mTotalRect.width(), (int) mTotalRect.bottom, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
