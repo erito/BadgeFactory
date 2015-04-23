@@ -1,6 +1,5 @@
 # BadgeFactory
-Simple factory class for building numbered badges for Android.  It will draw a bitmap with the correct dimensions 
-sufficient for a badge.
+Simple factory class for building numbered badges for Android.  Perfect for notification labels.  It will draw a shaped bitmap with the correct dimensions for a badge
 
 ## Dependencies
 This depends on being in an Android Project.  It is supported for api level 10+.
