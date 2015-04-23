@@ -16,7 +16,7 @@ Thats it!  From there you can use it within your adapter classes.  Heres a quick
 ```java
 
 public Adapter(Context context) {
-    this.mFactory = new Factory(context, Color.parseColor("red"));
+    this.mFactory = new BadgeFactory(context, Color.parseColor("red"));
     ...
 }
 
@@ -44,3 +44,5 @@ Thats it.  Enjoy.
 
 * Allow for different shapes as badges (Stars anyone)?
 * More shader effects.
+* Allow different font typefaces. (default is bold)
+* allow for specified font color (default is white)
