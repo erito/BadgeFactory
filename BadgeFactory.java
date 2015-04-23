@@ -46,16 +46,16 @@ public class BadgeFactory {
     /**
      * following four rects are for multi counts only,
      */
-    private RectF totalRect;
-    private RectF textRect; //used to draw the rectangle containing the text
-    private RectF leftRect; //used to draw the rectangle for the left arc for drawArc call
-    private RectF rightRect; //ditto for the right arc
+    private RectF mTotalRect;
+    private RectF mTextRect; //used to draw the rectangle containing the text
+    private RectF mLeftRect; //used to draw the rectangle for the left arc for drawArc call
+    private RectF mRightRect; //ditto for the right arc
 
 
     /**
      * Count displayed by the badge, casted to string if it isn't already
      */
-    private String count;
+    private String mCount;
 
     private Paint paint;
     private Rect textBounds;
@@ -66,12 +66,12 @@ public class BadgeFactory {
      */
     public BadgeFactory(Context context) {
         this.context = context;
-        this.totalRect = new RectF();
-        this.textRect = new RectF();
-        this.leftRect = new RectF();
-        this.rightRect = new RectF();
+        this.mTotalRect = new RectF();
+        this.mTextRect = new RectF();
+        this.mLeftRect = new RectF();
+        this.mRightRect = new RectF();
         this.textBounds = new Rect();
-        this.count = "";
+        this.mCount = "";
         this.badgeColor = -1;
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16,
                 context.getResources().getDisplayMetrics());
@@ -98,7 +98,7 @@ public class BadgeFactory {
      * @param count
      */
     public void setCount(String count) {
-        this.count = count;
+        this.mCount = count;
         setUp();
     }
 
@@ -108,7 +108,7 @@ public class BadgeFactory {
      * @param count the int representation of the count to be displayed in the badge
      */
     public void setCount(int count) {
-        this.count = String.valueOf(count);
+        this.mCount = String.valueOf(count);
         setUp();
     }
 
@@ -120,8 +120,8 @@ public class BadgeFactory {
         float newSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16,
                 context.getResources().getDisplayMetrics());
         paint.setTextSize(newSize);
-        if (!TextUtils.isEmpty(count)) {
-            this.paint.getTextBounds(this.count, 0, count.length(), this.textBounds);
+        if (!TextUtils.isEmpty(mCount)) {
+            this.paint.getTextBounds(this.mCount, 0, mCount.length(), this.textBounds);
         }
     }
 
@@ -144,42 +144,42 @@ public class BadgeFactory {
 
     //sets up the rectangle(s) to be used for drawing
     private void setUp() {
-        int len = count.length();
-        this.paint.getTextBounds(this.count, 0, count.length(), this.textBounds);
+        int len = mCount.length();
+        this.paint.getTextBounds(this.mCount, 0, mCount.length(), this.textBounds);
         this.type = len > 1 ? BadgeType.Cylinder : BadgeType.Circular;
 
         final float totalW = textBounds.width();
         final float totalH = paint.getTextSize() * 1.25f;//Magic number is to add vertical padding
 
         if (type != BadgeType.Circular) {
-            totalRect.set(0, 0, totalW + (BADGE_RADIUS * 2), totalH);
-            textRect.set(BADGE_RADIUS / 2, 0, totalRect.right - (BADGE_RADIUS/2), totalRect.bottom);
-            leftRect.set(0, 0, BADGE_RADIUS, totalRect.bottom);
-            rightRect.set(textRect.right - BADGE_RADIUS/2, 0, totalRect.right, totalRect.bottom);
+            mTotalRect.set(0, 0, totalW + (BADGE_RADIUS * 2), totalH);
+            mTextRect.set(BADGE_RADIUS / 2, 0, mTotalRect.right - (BADGE_RADIUS / 2), mTotalRect.bottom);
+            mLeftRect.set(0, 0, BADGE_RADIUS, mTotalRect.bottom);
+            mRightRect.set(mTextRect.right - BADGE_RADIUS / 2, 0, mTotalRect.right, mTotalRect.bottom);
         } else {
-            totalRect.set(0, 0, totalH, totalH);
+            mTotalRect.set(0, 0, totalH, totalH);
         }
     }
 
     public Bitmap build() {
 
-        Bitmap output = Bitmap.createBitmap((int)totalRect.width(), (int)totalRect.bottom, Bitmap.Config.ARGB_8888);
+        Bitmap output = Bitmap.createBitmap((int) mTotalRect.width(), (int) mTotalRect.bottom, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         paint.setColor(badgeColor);
 
         if (type != BadgeType.Circular) {
-            float textY = textRect.height() * .8f;
-            canvas.drawRect(textRect, paint);
-            canvas.drawArc(leftRect, 90, 180, true, paint);
-            canvas.drawArc(rightRect, 270, 180, true, paint);
+            float textY = mTextRect.height() * .8f;
+            canvas.drawRect(mTextRect, paint);
+            canvas.drawArc(mLeftRect, 90, 180, true, paint);
+            canvas.drawArc(mRightRect, 270, 180, true, paint);
             paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawText(count, textRect.centerX(), textY, paint);
+            canvas.drawText(mCount, mTextRect.centerX(), textY, paint);
         } else {
-            final float square = Math.min(textRect.width(), textRect.height());
-            final float centerX = totalRect.width() / 2 + 0.7f;
-            final float centerY = totalRect.height() / 2 + 0.7f;
+            final float square = Math.min(mTextRect.width(), mTextRect.height());
+            final float centerX = mTotalRect.width() / 2 + 0.7f;
+            final float centerY = mTotalRect.height() / 2 + 0.7f;
             canvas.drawCircle(centerX, centerY, square / 2 + 0.1f, paint);
-            canvas.drawText(count, centerX, centerY, paint);
+            canvas.drawText(mCount, centerX, centerY, paint);
         }
 
         return output;
