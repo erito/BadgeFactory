@@ -1,4 +1,4 @@
-package <Your Package Here>;
+package <Your Package Name Here>;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -147,7 +147,7 @@ public class BadgeFactory {
     private void setUp() {
         int len = mCount.length();
         this.paint.getTextBounds(this.mCount, 0, mCount.length(), this.textBounds);
-        this.type = len > 1 ? BadgeType.Cylinder : BadgeType.Circular;
+        this.type = len > 2 ? BadgeType.Cylinder : BadgeType.Circular;
 
         final float totalW = textBounds.width();
         final float totalH = paint.getTextSize() * 1.25f;//Magic number is to add vertical padding
@@ -158,7 +158,7 @@ public class BadgeFactory {
             mLeftRect.set(0, 0, BADGE_RADIUS, mTotalRect.bottom);
             mRightRect.set(mTextRect.right - BADGE_RADIUS / 2, 0, mTotalRect.right, mTotalRect.bottom);
         } else {
-            mTotalRect.set(0, 0, totalH + BADGE_RADIUS, totalH + BADGE_RADIUS);
+            mTotalRect.set(0, 0, totalH + (BADGE_RADIUS/2), totalH + (BADGE_RADIUS/2));
         }
     }
 
