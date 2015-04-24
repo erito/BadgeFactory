@@ -1,4 +1,4 @@
-package <Your Namespace Here>;
+package <Your Package Here>;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -158,7 +158,7 @@ public class BadgeFactory {
             mLeftRect.set(0, 0, BADGE_RADIUS, mTotalRect.bottom);
             mRightRect.set(mTextRect.right - BADGE_RADIUS / 2, 0, mTotalRect.right, mTotalRect.bottom);
         } else {
-            mTotalRect.set(0, 0, totalH, totalH);
+            mTotalRect.set(0, 0, totalH + BADGE_RADIUS, totalH + BADGE_RADIUS);
         }
     }
 
@@ -180,11 +180,11 @@ public class BadgeFactory {
             paint.setColor(Color.argb(255, 255, 255, 255));
             canvas.drawText(mCount, mTextRect.centerX(), textY, paint);
         } else {
-            final float square = Math.min(mTextRect.width(), mTextRect.height());
-            final float centerX = mTotalRect.width() / 2 + 0.7f;
-            final float centerY = mTotalRect.height() / 2 + 0.7f;
-            canvas.drawCircle(centerX, centerY, square / 2 + 0.1f, paint);
-            canvas.drawText(mCount, centerX, centerY, paint);
+            float textY = mTotalRect.height() * .7f;
+            float radius = (float)mTotalRect.height() / 2 + 0.1f;
+            canvas.drawCircle(mTotalRect.centerX(), mTotalRect.centerY(), radius , paint);
+            paint.setColor(Color.argb(255, 255, 255, 255));
+            canvas.drawText(mCount, mTotalRect.centerX(), textY, paint);
         }
 
         return output;
