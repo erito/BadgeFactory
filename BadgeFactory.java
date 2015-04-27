@@ -33,7 +33,7 @@ import android.util.TypedValue;
  */
 public class BadgeFactory {
 
-    private static final int BADGE_RADIUS = 30;
+    private static final int BADGE_RADIUS = 35;
     private static final int NO_COLOR = -1;
 
     private enum BadgeType {
@@ -77,7 +77,6 @@ public class BadgeFactory {
         float textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16,
                 context.getResources().getDisplayMetrics());
         this.paint = new Paint();
-        paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.DEFAULT_BOLD);
         paint.setTextSize(textSize);
         paint.setAntiAlias(true);
@@ -146,19 +145,21 @@ public class BadgeFactory {
     //sets up the rectangle(s) to be used for drawing
     private void setUp() {
         int len = mCount.length();
-        this.paint.getTextBounds(this.mCount, 0, mCount.length(), this.textBounds);
         this.type = len > 2 ? BadgeType.Cylinder : BadgeType.Circular;
+        this.paint.setTextAlign(type == BadgeType.Cylinder ? Paint.Align.LEFT : Paint.Align.CENTER);
+        this.paint.getTextBounds(this.mCount, 0, mCount.length(), this.textBounds);
 
         final float totalW = textBounds.width();
-        final float totalH = paint.getTextSize() * 1.25f;//Magic number is to add vertical padding
 
         if (type != BadgeType.Circular) {
-            mTotalRect.set(0, 0, totalW + (BADGE_RADIUS * 2), totalH);
-            mTextRect.set(BADGE_RADIUS / 2, 0, mTotalRect.right - (BADGE_RADIUS / 2), mTotalRect.bottom);
-            mLeftRect.set(0, 0, BADGE_RADIUS, mTotalRect.bottom);
-            mRightRect.set(mTextRect.right - BADGE_RADIUS / 2, 0, mTotalRect.right, mTotalRect.bottom);
+            final float totalH = paint.getTextSize() * 1.5f;//Magic number is to add vertical padding
+            mTotalRect.set(0, 0, totalW + BADGE_RADIUS, totalH);
+            mLeftRect.set(0, 0, (BADGE_RADIUS * 1.25f), mTotalRect.bottom);
+            mTextRect.set(BADGE_RADIUS * 0.5f, 0, mTotalRect.right - (BADGE_RADIUS * 0.5f), mTotalRect.bottom);
+            mRightRect.set(mTextRect.right - (BADGE_RADIUS * .75f), 0, mTotalRect.right, mTotalRect.bottom);
         } else {
-            mTotalRect.set(0, 0, totalH + (BADGE_RADIUS/2), totalH + (BADGE_RADIUS/2));
+            final float totalH = paint.getTextSize() * 1.25f;//Magic number is to add vertical padding
+            mTotalRect.set(0, 0, totalH + (BADGE_RADIUS / 2), totalH + (BADGE_RADIUS / 2));
         }
     }
 
@@ -173,12 +174,12 @@ public class BadgeFactory {
         paint.setColor(badgeColor);
 
         if (type != BadgeType.Circular) {
-            float textY = mTextRect.height() * .8f;
+            float textY = mTextRect.height() * .75f;
             canvas.drawRect(mTextRect, paint);
             canvas.drawArc(mLeftRect, 90, 180, true, paint);
             canvas.drawArc(mRightRect, 270, 180, true, paint);
             paint.setColor(Color.argb(255, 255, 255, 255));
-            canvas.drawText(mCount, mTextRect.centerX(), textY, paint);
+            canvas.drawText(mCount, mLeftRect.centerX() * .6f, textY, paint);
         } else {
             float textY = mTotalRect.height() * .7f;
             float radius = (float)mTotalRect.height() / 2 + 0.1f;
